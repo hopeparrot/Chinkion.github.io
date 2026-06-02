@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=IM+Fell+English:ital@0;1&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --cream: #e8dfc8;
+    --gold: #c9a96e;
+    --dim: #7a7060;
+    --accent: #4a90a4;
+    --panel: #141310;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--cream); font-family: 'Noto Serif JP', serif; cursor: default; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  #home {
+    scroll-snap-align: start; scroll-snap-stop: always;
+    width: 100vw; height: 100vh;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: flex-start;
+  }
+  #home::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("bg.png") center bottom / cover no-repeat;
+    z-index: 0;
+    pointer-events: none;
+}
+  .bg-circles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .bg-circles circle { fill: none; stroke: rgba(201,169,110,0.06); stroke-width: 1; }
+  .flow-lines { position: absolute; bottom: 0; left: 0; width: 100%; height: 55%; z-index: 2; pointer-events: none; }
+  .flow-line { fill: none; stroke: rgba(232,223,200,0.18); stroke-width: 1; }
+  .flow-line:nth-child(1) { animation: flowWave1 6s ease-in-out infinite; }
+  .flow-line:nth-child(2) { animation: flowWave2 7s ease-in-out infinite 0.5s; stroke: rgba(201,169,110,0.12); }
+  .flow-line:nth-child(3) { animation: flowWave3 8s ease-in-out infinite 1s; stroke: rgba(74,144,164,0.1); }
+  @keyframes flowWave1 {
+    0%,100% { d: path("M-100,200 C150,160 350,240 600,190 C850,140 1050,220 1300,180 C1450,160 1550,190 1700,170"); }
+    50%      { d: path("M-100,220 C150,180 350,200 600,230 C850,260 1050,180 1300,210 C1450,230 1550,200 1700,220"); }
+  }
+  @keyframes flowWave2 {
+    0%,100% { d: path("M-100,280 C200,240 400,310 650,260 C900,210 1100,290 1350,250 C1500,230 1600,260 1700,240"); }
+    50%      { d: path("M-100,260 C200,300 400,260 650,300 C900,340 1100,260 1350,290 C1500,310 1600,270 1700,300"); }
+  }
+  @keyframes flowWave3 {
+    0%,100% { d: path("M-100,340 C250,300 450,370 700,320 C950,270 1150,360 1400,310 C1550,285 1640,320 1700,300"); }
+    50%      { d: path("M-100,320 C250,360 450,310 700,360 C950,410 1150,320 1400,360 C1550,385 1640,350 1700,380"); }
+  }
+
+  .home-left {
+    position: relative; z-index: 3; padding-left: 8vw;
+    display: flex; flex-direction: column; gap: 0;
+    animation: homeEntrance 1.2s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes homeEntrance { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+  .site-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(80px, 11vw, 160px); font-weight: 300; letter-spacing: -0.02em; line-height: 0.9; color: var(--cream); }
+  .site-title .accent { color: var(--accent); }
+  .home-nav { margin-top: 5vh; display: flex; flex-direction: column; gap: 2.4vh; }
+  .nav-item { position: relative; display: inline-flex; align-items: center; cursor: pointer; width: fit-content; }
+  .nav-btn {
+    display: inline-block; border: 1px solid rgba(232,223,200,0.35); padding: 0.5em 1.8em;
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.2vw, 28px);
+    font-weight: 400; letter-spacing: 0.12em; color: var(--cream); text-transform: uppercase;
+    cursor: pointer; transition: border-color 0.3s, color 0.3s, background 0.3s;
+    background: transparent; border-radius: 3px; user-select: none; position: relative; z-index: 1;
+  }
+  .nav-btn .sub { font-size: 0.45em; letter-spacing: 0.2em; opacity: 0.5; font-family: 'Noto Serif JP', serif; margin-left: 0.8em; font-weight: 200; }
+  .nav-item:hover .nav-btn { border-color: var(--cream); background: rgba(232,223,200,0.04); }
+  .sketch-icon { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); width: 60px; height: 60px; pointer-events: none; z-index: 2; overflow: visible; }
+  .sketch-icon path, .sketch-icon circle, .sketch-icon line, .sketch-icon rect, .sketch-icon ellipse, .sketch-icon polyline {
+    fill: none; stroke: var(--cream); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 200; stroke-dashoffset: 200; transition: none;
+  }
+  .nav-item:hover .sketch-icon path, .nav-item:hover .sketch-icon circle, .nav-item:hover .sketch-icon line,
+  .nav-item:hover .sketch-icon rect, .nav-item:hover .sketch-icon ellipse, .nav-item:hover .sketch-icon polyline { animation: drawSketch 0.6s ease forwards; }
+  @keyframes drawSketch { to { stroke-dashoffset: 0; } }
+  .home-right { position: absolute; right: 0; top: 0; width: 38%; height: 100%; z-index: 1; pointer-events: none; }
+  .deco-svg { width: 100%; height: 100%; }
+  .scroll-hint { position: absolute; bottom: 3vh; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 10; opacity: 0.4; animation: fadeInHint 2s ease 1s both; }
+  .scroll-hint span { font-family: 'Cormorant Garamond', serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--cream); }
+  .scroll-line { width: 1px; height: 30px; background: linear-gradient(to bottom, var(--cream), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%,100% { transform: scaleY(1); opacity: 0.4; } 50% { transform: scaleY(1.3); opacity: 0.8; } }
+  @keyframes fadeInHint { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 0.4; transform: translateX(-50%) translateY(0); } }
+
+  .section-page { scroll-snap-align: start; scroll-snap-stop: always; width: 100vw; height: 100vh; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+  #illust { background: #0e0d0b; }
+  #comics { background: #0b0d0e; }
+  #ui     { background: #0d0e0b; }
+  #about  { background: #0e0b0d; }
+  .section-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: visible; }
+  .section-content { flex: 1; position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; padding: 0 8vw; opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; overflow: hidden; }
+  .section-page.visible .section-content { opacity: 1; transform: translateY(0); }
+  .section-eyebrow { font-family: 'Noto Serif JP', serif; font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--dim); margin-bottom: 1.5vh; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 7vw, 100px); font-weight: 300; letter-spacing: -0.01em; line-height: 1; color: var(--cream); margin-bottom: 3vh; }
+  .section-title .gold { color: var(--gold); }
+  .section-title .blue { color: var(--accent); }
+  .section-divider { width: 60px; height: 1px; background: var(--gold); margin-bottom: 3vh; opacity: 0.6; }
+  .section-desc { font-family: 'Noto Serif JP', serif; font-weight: 200; font-size: clamp(12px, 1.1vw, 15px); line-height: 2; color: rgba(232,223,200,0.65); max-width: 520px; }
+
+  .img-grid { display: flex; gap: 12px; margin-top: 3.5vh; flex-wrap: wrap; }
+  .img-card { width: clamp(80px, 9vw, 130px); height: clamp(70px, 9vh, 110px); border: 1px solid rgba(232,223,200,0.12); border-radius: 4px; overflow: hidden; position: relative; cursor: pointer; background: rgba(232,223,200,0.03); transition: border-color 0.3s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+  .img-card:hover { border-color: var(--gold); transform: translateY(-3px) scale(1.03); z-index: 2; }
+  .img-card img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.5s ease; }
+  .img-card img.loaded { opacity: 1; }
+  .img-card .card-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+  .img-card:hover .card-overlay { background: rgba(0,0,0,0.28); }
+  .card-overlay svg { opacity: 0; transition: opacity 0.3s; width: 22px; height: 22px; }
+  .img-card:hover .card-overlay svg { opacity: 1; }
+  .img-card.empty { cursor: default; }
+  .img-card.empty::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,169,110,0.05) 0%, transparent 100%); }
+  .img-card.empty:hover { border-color: rgba(201,169,110,0.3); transform: none; }
+
+  /* ABOUT ME */
+  #about .section-content { flex-direction: row; align-items: center; gap: 6vw; padding: 0 7vw; justify-content: flex-start; }
+  .about-left { flex: 0 0 auto; width: clamp(280px, 40vw, 520px); display: flex; flex-direction: column; }
+  .about-right { flex: 1; display: flex; flex-direction: column; gap: 3vh; min-width: 0; }
+  .about-avatar { width: clamp(120px, 14vw, 180px); height: clamp(120px, 14vw, 180px); border: 1px solid rgba(201,169,110,0.3); border-radius: 4px; overflow: hidden; position: relative; background: rgba(232,223,200,0.03); flex-shrink: 0; }
+  .about-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.5s; }
+  .about-avatar img.loaded { opacity: 1; }
+  .about-avatar-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .about-avatar-placeholder svg { width: 100%; height: 100%; }
+
+  .tools-label { font-family: 'Noto Serif JP', serif; font-size: 9px; letter-spacing: 0.35em; color: var(--dim); text-transform: uppercase; margin-top: 3.5vh; margin-bottom: 1.8vh; }
+  .tools-row { display: flex; gap: clamp(14px, 2.5vw, 32px); align-items: flex-start; }
+  .tool-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: default; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+  .tool-item:hover { transform: translateY(-5px); }
+
+  .tool-icon-wrap {
+    width: clamp(52px, 5.5vw, 68px);
+    height: clamp(52px, 5.5vw, 68px);
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; position: relative; overflow: visible;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .tool-item:hover .tool-icon-wrap { filter: drop-shadow(0 0 6px rgba(201,169,110,0.5)); }
+  .tool-icon-wrap svg { width: 100%; height: 100%; overflow: visible; }
+
+  .stamp-border {
+    fill: none; stroke: var(--gold); stroke-width: 2.8;
+    stroke-linecap: square; stroke-linejoin: miter; transition: stroke 0.3s;
+  }
+  .tool-item:hover .stamp-border { stroke: var(--cream); }
+  .stamp-letter { fill: var(--gold); transition: fill 0.3s; }
+  .tool-item:hover .stamp-letter { fill: var(--cream); }
+  .stamp-glyph {
+    fill: none; stroke: var(--gold); stroke-width: 3;
+    stroke-linecap: square; stroke-linejoin: miter; transition: stroke 0.3s;
+  }
+  .tool-item:hover .stamp-glyph { stroke: var(--cream); }
+
+  /* ══ CSP SPIRAL — square-cornered vortex, thick stroke, miter joins ══ */
+  .csp-spiral {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 5.5;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    transition: stroke 0.3s;
+  }
+  .tool-item:hover .csp-spiral { stroke: var(--cream); }
+
+  .tool-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(9px, 0.85vw, 11px); letter-spacing: 0.08em; color: var(--dim); text-align: center; white-space: nowrap; transition: color 0.3s; }
+  .tool-item:hover .tool-name { color: var(--gold); }
+  .tools-underline { width: 100%; height: 1px; background: linear-gradient(to right, rgba(201,169,110,0.3), transparent); margin-top: 2vh; }
+
+  .about-contacts { display: flex; flex-direction: column; gap: 2.4vh; }
+  .contact-row { display: flex; align-items: center; gap: 1.4vw; cursor: pointer; transition: opacity 0.2s; }
+  .contact-row:hover { opacity: 0.75; }
+  .contact-platform-icon { width: clamp(28px, 3.2vw, 42px); height: clamp(28px, 3.2vw, 42px); flex-shrink: 0; }
+  .contact-platform-icon svg { width: 100%; height: 100%; }
+  .contact-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .contact-type { font-family: 'Noto Serif JP', serif; font-size: 9px; letter-spacing: 0.25em; color: var(--dim); text-transform: uppercase; }
+  .contact-value { font-family: 'Cormorant Garamond', serif; font-size: clamp(14px, 1.6vw, 20px); font-weight: 300; letter-spacing: 0.06em; color: var(--cream); border-bottom: 1px solid rgba(232,223,200,0.18); padding-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .contact-value.placeholder { color: var(--dim); font-style: italic; font-size: clamp(12px, 1.2vw, 16px); }
+
+  #lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(8,7,6,0.95); display: none; align-items: center; justify-content: center; animation: lbFadeIn 0.25s ease; backdrop-filter: blur(6px); }
+  #lightbox.open { display: flex; }
+  @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .lb-img-wrap { position: relative; max-width: 88vw; max-height: 82vh; display: flex; align-items: center; justify-content: center; }
+  #lb-img { max-width: 88vw; max-height: 82vh; object-fit: contain; border: 1px solid rgba(232,223,200,0.1); border-radius: 3px; box-shadow: 0 30px 80px rgba(0,0,0,0.7); animation: lbImgIn 0.3s cubic-bezier(0.22,1,0.36,1); }
+  @keyframes lbImgIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+  .lb-close { position: absolute; top: 24px; right: 28px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.5; transition: opacity 0.2s, transform 0.2s; z-index: 10; }
+  .lb-close:hover { opacity: 1; transform: rotate(90deg); }
+  .lb-close svg { width: 22px; height: 22px; }
+  .lb-close svg line { stroke: var(--cream); stroke-width: 1.5; stroke-linecap: round; }
+  .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.4; transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); z-index: 10; }
+  .lb-arrow:hover { opacity: 1; }
+  .lb-arrow.prev { left: 20px; }
+  .lb-arrow.prev:hover { transform: translateY(-50%) translateX(-4px); }
+  .lb-arrow.next { right: 20px; }
+  .lb-arrow.next:hover { transform: translateY(-50%) translateX(4px); }
+  .lb-arrow svg { width: 28px; height: 28px; }
+  .lb-arrow svg polyline { fill: none; stroke: var(--cream); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .lb-counter { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.2em; color: rgba(232,223,200,0.4); }
+  .lb-section-label { position: absolute; top: 28px; left: 32px; font-family: 'Noto Serif JP', serif; font-size: 9px; letter-spacing: 0.3em; color: var(--dim); text-transform: uppercase; }
+
+  .lb-detail-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3vw;
+    max-width: 92vw;
+    max-height: 82vh;
+  }
+
+  .lb-main-wrap {
+    max-width: 65vw;
+    max-height: 82vh;
+  }
+
+  #lb-img {
+    max-width: 65vw;
+    max-height: 82vh;
+    object-fit: contain;
+  }
+
+  .lb-ref-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 22vw;
+    max-height: 82vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lb-ref-wrap img {
+    max-width: 22vw;
+    max-height: 38vh;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 35px rgba(0,0,0,0.45));
+  }
+
+  @media (max-width: 800px) {
+    .lb-detail-layout {
+      flex-direction: column;
+    }
+
+    #lb-img,
+    .lb-main-wrap {
+      max-width: 88vw;
+      max-height: 58vh;
+    }
+
+    .lb-ref-wrap {
+      flex-direction: row;
+      max-width: 88vw;
+      max-height: 20vh;
+    }
+
+    .lb-ref-wrap img {
+      max-width: 40vw;
+      max-height: 20vh;
+    }
+  }
+
+  .bottom-nav { position: relative; z-index: 10; width: 100%; height: 90px; background: rgba(9,8,7,0.92); border-top: 1px solid rgba(232,223,200,0.08); display: flex; align-items: stretch; flex-shrink: 0; backdrop-filter: blur(8px); }
+  .bottom-nav::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%); pointer-events: none; }
+  .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; position: relative; transition: background 0.35s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1); border-right: 1px solid rgba(232,223,200,0.06); padding: 0 10px; overflow: hidden; }
+  .bnav-item:last-child { border-right: none; }
+  .bnav-item:hover, .bnav-item.active { background: rgba(232,223,200,0.03); transform: translateY(-3px); }
+  .bnav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--dim); transition: background 0.3s, transform 0.35s cubic-bezier(0.34,1.56,0.64,1); margin-bottom: 2px; }
+  .bnav-item.active .bnav-dot, .bnav-item:hover .bnav-dot { background: var(--gold); transform: scale(2); }
+  .bnav-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(14px, 1.6vw, 20px); font-weight: 400; letter-spacing: 0.05em; color: var(--dim); transition: color 0.3s, font-size 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .bnav-item.active .bnav-title, .bnav-item:hover .bnav-title { color: var(--cream); font-size: clamp(17px, 2vw, 25px); }
+  .bnav-sub { font-family: 'Noto Serif JP', serif; font-size: 9px; letter-spacing: 0.15em; color: var(--dim); opacity: 0.6; transition: color 0.3s, opacity 0.3s; white-space: nowrap; }
+  .bnav-item.active .bnav-sub, .bnav-item:hover .bnav-sub { color: var(--gold); opacity: 1; }
+  .bnav-underline { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 1px; width: 0%; background: var(--gold); transition: width 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  .bnav-item.active .bnav-underline, .bnav-item:hover .bnav-underline { width: 60%; }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <div class="lb-section-label" id="lb-section-label"></div>
+  <div class="lb-close" id="lb-close"><svg viewBox="0 0 24 24"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg></div>
+  <div class="lb-arrow prev" id="lb-prev"><svg viewBox="0 0 28 28"><polyline points="18,4 8,14 18,24"/></svg></div>
+<div class="lb-detail-layout">
+  <div class="lb-main-wrap">
+    <img id="lb-img" src="" alt="">
+  </div>
+
+  <div class="lb-ref-wrap" id="lb-ref-wrap"></div>
+</div>
+  <div class="lb-arrow next" id="lb-next"><svg viewBox="0 0 28 28"><polyline points="10,4 20,14 10,24"/></svg></div>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<!-- HOME -->
+<section id="home">
+  <svg class="bg-circles" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <circle cx="900" cy="200" r="340"/><circle cx="1100" cy="500" r="220"/>
+    <circle cx="750" cy="650" r="180"/><circle cx="1300" cy="150" r="120"/><circle cx="600" cy="300" r="90"/>
+  </svg>
+  <svg class="flow-lines" viewBox="0 0 1700 400" preserveAspectRatio="none">
+    <path class="flow-line" d="M-100,200 C150,160 350,240 600,190 C850,140 1050,220 1300,180 C1450,160 1550,190 1700,170"/>
+    <path class="flow-line" d="M-100,280 C200,240 400,310 650,260 C900,210 1100,290 1350,250 C1500,230 1600,260 1700,240"/>
+    <path class="flow-line" d="M-100,340 C250,300 450,370 700,320 C950,270 1150,360 1400,310 C1550,285 1640,320 1700,300"/>
+  </svg>
+  <div class="home-left">
+    <div class="site-title">port<span class="accent">f</span>olio</div>
+    <nav class="home-nav">
+      <div class="nav-item" onclick="goTo('illust')">
+        <div class="nav-btn">Illustration <span class="sub">イラスト</span></div>
+        <svg class="sketch-icon" viewBox="0 0 60 60"><path d="M10,45 Q20,20 30,30 Q40,40 50,15"/><circle cx="30" cy="30" r="8"/><path d="M15,50 L20,40 L25,45"/></svg>
+      </div>
+      <div class="nav-item" onclick="goTo('comics')">
+        <div class="nav-btn">Comics <span class="sub">漫画</span></div>
+        <svg class="sketch-icon" viewBox="0 0 60 60"><rect x="8" y="10" width="20" height="25" rx="2"/><rect x="32" y="10" width="20" height="25" rx="2"/><rect x="8" y="38" width="20" height="14" rx="2"/><rect x="32" y="38" width="20" height="14" rx="2"/></svg>
+      </div>
+      <div class="nav-item" onclick="goTo('ui')">
+        <div class="nav-btn">UI Design <span class="sub">UIデザイン</span></div>
+        <svg class="sketch-icon" viewBox="0 0 60 60"><rect x="8" y="12" width="44" height="36" rx="3"/><line x1="8" y1="22" x2="52" y2="22"/><circle cx="14" cy="17" r="2"/><circle cx="21" cy="17" r="2"/><line x1="16" y1="32" x2="44" y2="32"/><line x1="16" y1="38" x2="36" y2="38"/></svg>
+      </div>
+      <div class="nav-item" onclick="goTo('about')">
+        <div class="nav-btn">About Me <span class="sub">自己紹介</span></div>
+        <svg class="sketch-icon" viewBox="0 0 60 60"><circle cx="30" cy="20" r="10"/><path d="M10,50 Q10,35 30,35 Q50,35 50,50"/></svg>
+      </div>
+    </nav>
+  </div>
+  <div class="home-right">
+    <svg class="deco-svg" viewBox="0 0 500 900" preserveAspectRatio="xMidYMid meet">
+      <circle cx="300" cy="200" r="200" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="1"/>
+      <circle cx="300" cy="200" r="150" fill="none" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+      <circle cx="300" cy="200" r="100" fill="none" stroke="rgba(74,144,164,0.06)" stroke-width="1"/>
+      <line x1="100" y1="0" x2="100" y2="900" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+      <line x1="200" y1="0" x2="200" y2="900" stroke="rgba(232,223,200,0.03)" stroke-width="1"/>
+      <path d="M50,600 Q200,550 350,620 Q420,650 500,610" fill="none" stroke="rgba(201,169,110,0.08)" stroke-width="1"/>
+      <path d="M0,700 Q150,660 300,720 Q400,750 500,710" fill="none" stroke="rgba(232,223,200,0.06)" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ILLUSTRATION -->
+<section id="illust" class="section-page">
+  <svg class="section-bg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <circle cx="1100" cy="150" r="300" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="1"/>
+    <circle cx="1100" cy="150" r="200" fill="none" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+    <circle cx="200" cy="700" r="180" fill="none" stroke="rgba(74,144,164,0.05)" stroke-width="1"/>
+  </svg>
+  <div class="section-content">
+    <div class="section-eyebrow">Portfolio — 01</div>
+    <div class="section-title">Illustr<span class="gold">a</span>tion</div>
+    <div class="section-divider"></div>
+    <p class="section-desc">主にキャラクターデザインと<br>キャラクターのイラストの制作を行っています。<br>さまざまなスタイルのイラストレーション作品をご紹介します。<br>一部のキャラクターデザイン作品の背景には素材を使用しています。
+学習・交流目的での展示のため、キャラクター部分の透過版も併せて掲載しております。<br>※背景素材は参加した企画で配布されたものを使用しており、色調などの加工・調整を行っています。</p>
+    <div class="img-grid" id="illust-grid">
+      <div class="img-card" data-section="Illustration" data-index="0"><img src="img/p1_thumb.png" alt="Illustration 1"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Illustration" data-index="1"><img src="img/p3_thumb.png" alt="Illustration 2"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+       <div class="img-card" data-section="Illustration" data-index="2"><img src="img/1111.png" alt="Illustration 1"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Illustration" data-index="3"><img src="img/2.png" alt="Illustration 2"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Illustration" data-index="4"><img src="img/33.png" alt="Illustration 2"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+    </div>
+    </div>
+  <nav class="bottom-nav">
+    <div class="bnav-item active" onclick="goTo('illust')"><div class="bnav-dot"></div><div class="bnav-title">Illustration</div><div class="bnav-sub">イラスト</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('comics')"><div class="bnav-dot"></div><div class="bnav-title">Comics</div><div class="bnav-sub">漫画</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('ui')"><div class="bnav-dot"></div><div class="bnav-title">UI Design</div><div class="bnav-sub">UIデザイン</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('about')"><div class="bnav-dot"></div><div class="bnav-title">About Me</div><div class="bnav-sub">自己紹介</div><div class="bnav-underline"></div></div>
+  </nav>
+</section>
+
+<!-- COMICS -->
+<section id="comics" class="section-page">
+  <svg class="section-bg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <circle cx="300" cy="200" r="280" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="1"/>
+    <circle cx="1200" cy="750" r="200" fill="none" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+    <circle cx="700" cy="450" r="150" fill="none" stroke="rgba(74,144,164,0.04)" stroke-width="1"/>
+  </svg>
+  <div class="section-content">
+    <div class="section-eyebrow">Portfolio — 02</div>
+    <div class="section-title">Com<span class="gold">i</span>cs</div>
+    <div class="section-divider"></div>
+    <p class="section-desc">閲覧注意！<br>
+2枚目以降には不安感を与える描写やホラー表現が含まれています。ご理解のうえ、ご覧ください。<br>さまざまなジャンルの短編漫画を制作しており、<br>特にコメディやホラー・サスペンス系の短編漫画を得意としています。</p>
+    <div class="img-grid" id="comics-grid">
+      <div class="img-card" data-section="Comics" data-index="0"><img src="img/mh1.png" alt="Comics 1"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Comics" data-index="1"><img src="img/ch2.png" alt="Comics 2"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Comics" data-index="2"><img src="img/ch3.png" alt="Comics 3"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="Comics" data-index="3"><img src="img/zuizhong.png" alt="Comics 4"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="bnav-item" onclick="goTo('illust')"><div class="bnav-dot"></div><div class="bnav-title">Illustration</div><div class="bnav-sub">イラスト</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item active" onclick="goTo('comics')"><div class="bnav-dot"></div><div class="bnav-title">Comics</div><div class="bnav-sub">漫画</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('ui')"><div class="bnav-dot"></div><div class="bnav-title">UI Design</div><div class="bnav-sub">UIデザイン</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('about')"><div class="bnav-dot"></div><div class="bnav-title">About Me</div><div class="bnav-sub">自己紹介</div><div class="bnav-underline"></div></div>
+  </nav>
+</section>
+
+<!-- UI DESIGN -->
+<section id="ui" class="section-page">
+  <svg class="section-bg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <circle cx="900" cy="450" r="320" fill="none" stroke="rgba(74,144,164,0.06)" stroke-width="1"/>
+    <circle cx="900" cy="450" r="240" fill="none" stroke="rgba(201,169,110,0.04)" stroke-width="1"/>
+    <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+  </svg>
+  <div class="section-content">
+    <div class="section-eyebrow">Portfolio — 03</div>
+    <div class="section-title"><span class="blue">UI</span> Design</div>
+    <div class="section-divider"></div>
+    <p class="section-desc">UIデザインの経験もあり、<br>以前に野鳥観察アプリのUIデザインに取り組んだことがあります。</p>
+    <div class="img-grid" id="ui-grid">
+      <div class="img-card" data-section="UI Design" data-index="0"><img src="IMG/bbb.png" alt="UI Design 1"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="UI Design" data-index="1"><img src="IMG/bbb1.png" alt="UI Design 2"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+      <div class="img-card" data-section="UI Design" data-index="2"><img src="IMG/bbb2.png" alt="UI Design 3"><div class="card-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,223,200,0.9)" stroke-width="1.5" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div></div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="bnav-item" onclick="goTo('illust')"><div class="bnav-dot"></div><div class="bnav-title">Illustration</div><div class="bnav-sub">イラスト</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('comics')"><div class="bnav-dot"></div><div class="bnav-title">Comics</div><div class="bnav-sub">漫画</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item active" onclick="goTo('ui')"><div class="bnav-dot"></div><div class="bnav-title">UI Design</div><div class="bnav-sub">UIデザイン</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('about')"><div class="bnav-dot"></div><div class="bnav-title">About Me</div><div class="bnav-sub">自己紹介</div><div class="bnav-underline"></div></div>
+  </nav>
+</section>
+
+<!-- ABOUT ME -->
+<section id="about" class="section-page">
+  <svg class="section-bg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <circle cx="500" cy="300" r="250" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="1"/>
+    <circle cx="1100" cy="600" r="200" fill="none" stroke="rgba(232,223,200,0.04)" stroke-width="1"/>
+    <circle cx="700" cy="700" r="120" fill="none" stroke="rgba(74,144,164,0.05)" stroke-width="1"/>
+  </svg>
+
+  <div class="section-content">
+    <div class="about-left">
+      <div class="section-eyebrow">Profile</div>
+      <div class="section-title">About <span class="gold">Me</span></div>
+      <div class="section-divider"></div>
+      <p class="section-desc">
+        武蔵野美術大学<br>
+        デザイン情報学科　チンキオン <br>
+        ファンタジーや架空世界を題材とした作品を好み、<br>
+        オンラインのイラスト企画に参加しています。キャラクターデザインを得意としており、<br>
+        設定の背景にあるストーリーを掘り下げることを楽しんでいます。
+      </p>
+
+      <div class="tools-label">使用ソフトウェア</div>
+      <div class="tools-row">
+
+        <!-- ILLUSTRATOR -->
+        <div class="tool-item">
+          <div class="tool-icon-wrap">
+            <svg viewBox="0 0 80 80" fill="none">
+              <path class="stamp-border" d="M7,6 L73,7 L74,74 L6,73 Z"/>
+              <path class="stamp-border" stroke-width="1.4" opacity="0.5" d="M13,13 L67,14 L68,67 L12,66 Z"/>
+              <path class="stamp-glyph" stroke-width="4.5" stroke-linecap="square" d="M28,58 L40,20 L52,58"/>
+              <path class="stamp-glyph" stroke-width="4.5" stroke-linecap="square" d="M32,44 L48,44"/>
+              <path class="stamp-glyph" stroke-width="4.5" stroke-linecap="square" d="M58,34 L58,58"/>
+              <rect class="stamp-letter" x="55" y="24" width="6" height="6"/>
+            </svg>
+          </div>
+          <div class="tool-name">Illustrator</div>
+        </div>
+
+        <!-- PHOTOSHOP -->
+        <div class="tool-item">
+          <div class="tool-icon-wrap">
+            <svg viewBox="0 0 80 80" fill="none">
+              <path class="stamp-border" d="M6,8 L72,6 L75,72 L8,74 Z"/>
+              <path class="stamp-border" stroke-width="2" d="M55,6 L75,22"/>
+              <path class="stamp-glyph" stroke-width="4.5" stroke-linecap="square" d="M22,20 L22,60"/>
+              <path class="stamp-glyph" stroke-width="4.5" stroke-linecap="square" d="M22,20 L42,20 C50,20 52,28 52,33 C52,38 50,44 42,44 L22,44"/>
+              <path class="stamp-glyph" stroke-width="4" stroke-linecap="round" d="M64,35 C64,35 55,33 55,39 C55,44 64,43 64,48 C64,54 55,53 55,53"/>
+            </svg>
+          </div>
+          <div class="tool-name">Photoshop</div>
+        </div>
+
+        <!-- ══ CLIP STUDIO — square-cornered vortex spiral, CSP-style ══ -->
+        <div class="tool-item">
+          <div class="tool-icon-wrap">
+            <svg viewBox="0 0 80 80" fill="none">
+              <!-- outer rough frame -->
+              <path class="stamp-border" d="M7,7 L73,6 L74,73 L6,74 Z"/>
+              <!-- inner frame line -->
+              <path class="stamp-border" stroke-width="1.3" opacity="0.4" d="M14,14 L66,13 L67,66 L13,67 Z"/>
+              <!--
+                Square-cornered clockwise-inward spiral.
+                Starting from upper-left region, spiraling to centre with strict 90deg turns.
+                Outer loop  : (16,16) right -> (62,16) down -> (62,62) left -> (16,62) up -> (16,24)
+                Middle loop : (16,24) right -> (54,24) down -> (54,54) left -> (24,54) up -> (24,32)
+                Inner loop  : (24,32) right -> (46,32) down -> (46,46) left -> (32,46) up -> (32,40)
+                Tip         : (32,40) right -> (40,40) (open end, towards centre)
+              -->
+              <path class="csp-spiral"
+                d="M16,16
+                   L62,16
+                   L62,62
+                   L16,62
+                   L16,24
+                   L54,24
+                   L54,54
+                   L24,54
+                   L24,32
+                   L46,32
+                   L46,46
+                   L32,46
+                   L32,40
+                   L40,40"/>
+            </svg>
+          </div>
+          <div class="tool-name">Clip Studio</div>
+        </div>
+
+        <!-- FIGMA -->
+        <div class="tool-item">
+          <div class="tool-icon-wrap">
+            <svg viewBox="0 0 80 80" fill="none">
+              <path class="stamp-border" d="M7,7 L65,7 L74,16 L74,73 L7,74 Z"/>
+              <path class="stamp-border" stroke-width="1.2" d="M65,7 L74,16"/>
+              <path class="stamp-glyph" stroke-width="5" stroke-linecap="square" d="M24,18 L24,62"/>
+              <path class="stamp-glyph" stroke-width="5" stroke-linecap="square" d="M24,18 L54,18"/>
+              <path class="stamp-glyph" stroke-width="5" stroke-linecap="square" d="M24,40 L50,40"/>
+              <circle class="stamp-letter" cx="56" cy="26" r="4"/>
+              <circle class="stamp-letter" cx="56" cy="55" r="4"/>
+            </svg>
+          </div>
+          <div class="tool-name">Figma</div>
+        </div>
+
+      </div>
+      <div class="tools-underline"></div>
+    </div>
+
+    <div class="about-right">
+      <div class="about-avatar" id="about-avatar">
+        <img src="img/me.png" alt="Profile" id="about-avatar-img">
+        <div class="about-avatar-placeholder" id="avatar-placeholder">
+          <svg viewBox="0 0 180 180" fill="none">
+            <rect x="1" y="1" width="178" height="178" rx="3" stroke="rgba(201,169,110,0.2)" stroke-width="1"/>
+            <line x1="1" y1="1" x2="179" y2="179" stroke="rgba(201,169,110,0.08)" stroke-width="1"/>
+            <line x1="179" y1="1" x2="1" y2="179" stroke="rgba(201,169,110,0.08)" stroke-width="1"/>
+            <circle cx="90" cy="68" r="24" stroke="rgba(201,169,110,0.25)" stroke-width="1.2"/>
+            <path d="M40,155 Q40,112 90,112 Q140,112 140,155" stroke="rgba(201,169,110,0.25)" stroke-width="1.2" fill="none"/>
+            <text x="90" y="172" text-anchor="middle" font-family="'Noto Serif JP',serif" font-size="8" fill="rgba(201,169,110,0.3)" letter-spacing="3">PHOTO</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="about-contacts">
+        <a class="contact-row" href="mailto:" style="text-decoration:none;">
+          <div class="contact-platform-icon">
+            <svg viewBox="0 0 42 42" fill="none">
+              <path d="M4,10 L38,10 L38,32 L4,32 Z" stroke="rgba(232,223,200,0.5)" stroke-width="1.5" fill="none"/>
+              <path d="M4,10 L21,24 L38,10" stroke="rgba(232,223,200,0.5)" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <div class="contact-type">email</div>
+            <div class="contact-value placeholder">単なるプレースホルダーなので、無視してください@example.com</div>
+          </div>
+        </a>
+        <a class="contact-row" href="単なるプレースホルダーなので、無視してください" target="_blank" style="text-decoration:none;">
+          <div class="contact-platform-icon">
+            <svg viewBox="0 0 42 42" fill="none">
+              <path d="M6,6 L24,22 L36,6" stroke="rgba(232,223,200,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M36,36 L18,20 L6,36" stroke="rgba(232,223,200,0.6)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="contact-info">
+            <div class="contact-type">X / Twitter</div>
+            <div class="contact-value placeholder">単なるプレースホルダーなので、無視してください</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="bnav-item" onclick="goTo('illust')"><div class="bnav-dot"></div><div class="bnav-title">Illustration</div><div class="bnav-sub">イラスト</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('comics')"><div class="bnav-dot"></div><div class="bnav-title">Comics</div><div class="bnav-sub">漫画</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item" onclick="goTo('ui')"><div class="bnav-dot"></div><div class="bnav-title">UI Design</div><div class="bnav-sub">UIデザイン</div><div class="bnav-underline"></div></div>
+    <div class="bnav-item active" onclick="goTo('about')"><div class="bnav-dot"></div><div class="bnav-title">About Me</div><div class="bnav-sub">自己紹介</div><div class="bnav-underline"></div></div>
+  </nav>
+</section>
+
+<script>
+  const sections = ['home','illust','comics','ui','about'];
+const works = {
+  Illustration: [
+    {
+      detail: "img/p1_detail.png",
+      refs: ["img/p2_ref.png"]
+    },
+    {
+      detail: "img/p3_detail.png",
+      refs: ["img/p4_ref.png", "img/p5_ref.png"]
+    },
+    {
+      detail: "img/11kk.png",
+      refs: []
+    },
+    {
+      detail: "img/2kk.png",
+      refs: []
+    },
+    {
+      detail: "img/33k.png",
+      refs: ["img/meibao1.png", "img/meibao2.png"]
+    }
+  ],
+
+  Comics: [
+    {
+      detail: "img/4.png",
+      refs: ["img/mh2.png"]
+    },
+    {
+      detail: "img/ch2.png",
+      refs: []
+    },
+    {
+      detail: "img/ch3.png",
+      refs: []
+    },
+    {
+      detail: "img/zuizhong.png",
+      refs: ["img/zuizhong3.png"]
+    }
+  ] ,
+ "UI Design": [
+    {
+      detail: "img/bbb.png",
+      refs: []
+    },
+    {
+      detail: "img/bbb1.png",
+      refs: []
+    },
+    {
+      detail: "img/bbb2.png",
+      refs: []
+    }
+  ]
+};
+  let current = 0, locked = false;
+
+  function goTo(id) {
+    const idx = sections.indexOf(id);
+    if (idx !== -1) snapTo(idx);
+  }
+  function snapTo(index) {
+    if (index < 0 || index >= sections.length) return;
+    current = index; locked = true;
+    document.getElementById(sections[current]).scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => { locked = false; }, 900);
+  }
+
+  window.addEventListener('wheel', e => {
+    if (locked || lbOpen) return;
+    e.preventDefault();
+    snapTo(current + (e.deltaY > 0 ? 1 : -1));
+  }, { passive: false });
+
+  let touchY = 0;
+  window.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; });
+  window.addEventListener('touchend', e => {
+    if (locked || lbOpen) return;
+    const dy = touchY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 40) snapTo(current + (dy > 0 ? 1 : -1));
+  });
+
+  window.addEventListener('keydown', e => {
+    if (lbOpen) {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); lbStep(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); lbStep(1);  }
+      if (e.key === 'Escape')     { e.preventDefault(); closeLightbox(); }
+      return;
+    }
+    if (locked) return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); snapTo(current + 1); }
+    if (e.key === 'ArrowUp'   || e.key === 'PageUp'  ) { e.preventDefault(); snapTo(current - 1); }
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        const idx = sections.indexOf(entry.target.id);
+        if (idx !== -1) current = idx;
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.section-page').forEach(s => observer.observe(s));
+  observer.observe(document.getElementById('home'));
+
+  const avatarImg = document.getElementById('about-avatar-img');
+  const avatarPlaceholder = document.getElementById('avatar-placeholder');
+  if (avatarImg && avatarImg.src && avatarImg.src !== window.location.href) {
+    avatarImg.addEventListener('load', () => { avatarImg.classList.add('loaded'); if (avatarPlaceholder) avatarPlaceholder.style.display = 'none'; });
+    if (avatarImg.complete && avatarImg.naturalWidth > 0) { avatarImg.classList.add('loaded'); if (avatarPlaceholder) avatarPlaceholder.style.display = 'none'; }
+  }
+
+  document.querySelectorAll('.img-card').forEach(card => {
+    const img = card.querySelector('img');
+    if (!img || !img.src || img.src === window.location.href) { card.classList.add('empty'); return; }
+    img.addEventListener('load', () => img.classList.add('loaded'));
+    if (img.complete) img.classList.add('loaded');
+    card.addEventListener('click', () => openLightbox(card));
+  });
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbLabel = document.getElementById('lb-section-label');
+  let lbOpen = false, lbCards = [], lbIdx = 0;
+
+  function openLightbox(card) {
+  if (card.dataset.warning === "true") {
+    const ok = confirm("不安を感じさせる内容が含まれる可能性があります。続けますか？");
+    if (!ok) return;
+  }
+
+  const section = card.dataset.section;
+  lbCards = Array.from(document.querySelectorAll(`.img-card[data-section="${section}"]:not(.empty)`));
+  lbIdx = lbCards.indexOf(card);
+  renderLb();
+  lb.classList.add('open'); 
+  lbOpen = true;
+  document.body.style.overflow = 'hidden';
+}
+  function renderLb() {
+    const card = lbCards[lbIdx];
+    const section = card.dataset.section;
+    const index = Number(card.dataset.index);
+    const work = works[section]?.[index];
+
+    if (!work) return;
+
+    lbImg.src = work.detail;
+    lbImg.alt = section + " " + (index + 1);
+
+    const refWrap = document.getElementById('lb-ref-wrap');
+    refWrap.innerHTML = '';
+
+    work.refs.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Reference';
+      refWrap.appendChild(img);
+    });
+
+    lbCounter.textContent = (lbIdx + 1) + ' / ' + lbCards.length;
+    lbLabel.textContent = section;
+
+    document.getElementById('lb-prev').style.opacity = lbIdx === 0 ? '0.15' : '';
+    document.getElementById('lb-next').style.opacity = lbIdx === lbCards.length - 1 ? '0.15' : '';
+  }
+  function lbStep(dir) {
+    const next = lbIdx + dir;
+    if (next < 0 || next >= lbCards.length) return;
+    lbIdx = next;
+    lbImg.style.opacity = '0';
+    lbImg.style.transform = `translateX(${dir * 20}px)`;
+    setTimeout(() => {
+      renderLb();
+      lbImg.style.transition = 'none';
+      lbImg.style.opacity = '0';
+      lbImg.style.transform = `translateX(${-dir * 20}px)`;
+      requestAnimationFrame(() => {
+        lbImg.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        lbImg.style.opacity = '1';
+        lbImg.style.transform = 'translateX(0)';
+      });
+    }, 150);
+  }
+  function closeLightbox() {
+    lb.classList.remove('open'); lbOpen = false;
+    document.body.style.overflow = '';
+    setTimeout(() => { lbImg.src = ''; }, 300);
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', () => lbStep(-1));
+  document.getElementById('lb-next').addEventListener('click', () => lbStep(1));
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+</script>
+</body>
+</html>
